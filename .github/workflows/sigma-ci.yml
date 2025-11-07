@@ -66,11 +66,11 @@ jobs:
         run: |
           mkdir -p detections/windows
 
-      - name: Convert Windows Sigma rules to Elastic DSL
+      - name: Convert Windows Sigma rules to Elastic Lucene queries
         run: |
           sigma convert \
-            -t elasticsearch \
-            -f dsl_lucene \
+            -t lucene \
             -p ecs_windows \
-            -o detections/windows/elastic_detections.json \
+            -o detections/windows/elastic_lucene_queries.txt \
             sigma-rules/windows
+
