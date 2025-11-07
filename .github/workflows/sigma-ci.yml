@@ -33,3 +33,31 @@ jobs:
         run: |
           sigma check sigma-rules
 
+  sigma-convert-elastic:
+    needs: sigma-lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install sigma-cli
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install sigma-cli
+
+      - name: Ensure detections directory exists
+        run: |
+          mkdir -p detections/windows
+
+      - name: Convert Windows Sigma rules to Elastic DSL
+        run: |
+          sigma convert \
+            -t es-dsl \
+            -o detections/windows/elastic_detections.json \
+            sigma-rules/windows
