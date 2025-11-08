@@ -50,10 +50,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install sigma-cli
-          # Install Elasticsearch backend plugin
           sigma plugin install elasticsearch
 
-      - name: Debug - list available backends and targets
+      - name: Debug - list available backends, targets, pipelines
         run: |
           echo "== Backends =="
           sigma plugin list --plugin-type backend
@@ -74,3 +73,9 @@ jobs:
             -o detections/windows/elastic_lucene_queries.txt \
             sigma-rules/windows
 
+      # 🆕 New step — Upload build artifact so you can download results
+      - name: Upload converted queries as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elastic-lucene-queries
+          path: detections/windows/elastic_lucene_queries.txt
